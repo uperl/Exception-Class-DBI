@@ -1,15 +1,15 @@
 #!/usr/bin/perl -w
 
-# $Id: sth.t,v 1.3 2002/08/22 16:10:24 david Exp $
+# $Id: sth.t,v 1.4 2002/08/23 18:26:26 david Exp $
 
 use strict;
 use Test::More (tests => 35);
 BEGIN { use_ok('Exception::Class::DBI') }
+BEGIN { $ENV{DBI_PUREPERL} = 2 }
 use DBI;
 
-
-#ok( my $dbh = DBI->connect('dbi:ExampleP:dummy', '', '',
-ok( my $dbh = DBI->connect('dbi:Pg:dbname=template1', 'postgres', '',
+ok( my $dbh = DBI->connect('dbi:ExampleP:dummy', '', '',
+#ok( my $dbh = DBI->connect('dbi:Pg:dbname=template1', 'postgres', '',
                            { PrintError => 0,
                              RaiseError => 0,
                              HandleError => Exception::Class::DBI->handler
@@ -27,20 +27,17 @@ eval {
     $sth->execute;
 };
 
-diag "Exception: $@";
-
 # Make sure we got the proper exception.
 ok( my $err = $@, "Get exception" );
 isa_ok( $err, 'Exception::Class::DBI' );
 isa_ok( $err, 'Exception::Class::DBI::H' );
 isa_ok( $err, 'Exception::Class::DBI::STH' );
 
-ok( $err->err == 7, "Check err" );
-is( $err->errstr, 'ERROR:  Relation "foo" does not exist',
+ok( $err->err == 2, "Check err" );
+is( $err->errstr, 'opendir(foo): No such file or directory',
     "Check errstr" );
-is( $err->error,
-    'DBD::Pg::st execute failed: ERROR:  Relation "foo" does not exist',
-    "Check error" );
+is( $err->error, 'DBD::ExampleP::st execute failed: opendir(foo): No such '.
+    "file or directory\n", "Check error" );
 is( $err->state, 'S1000', "Check state" );
 ok( ! defined $err->retval, "Check retval" );
 
@@ -50,20 +47,32 @@ ok( $err->kids == 0, 'Check kids' );
 ok( $err->active_kids == 0, 'Check active_kids' );
 ok( ! $err->compat_mode, 'Check compat_mode' );
 ok( ! $err->inactive_destroy, 'Check inactive_destroy' );
-ok( $err->trace_level == 0, 'Check trace_level' );
+
+{
+    # PurePerl->{TraceLevel} should return an integer, but it doesn't.
+    local $^W;
+    ok( $err->trace_level == 0, 'Check trace_level' );
+}
+
 is( $err->fetch_hash_key_name, 'NAME', 'Check fetch_hash_key_name' );
 ok( ! $err->chop_blanks, 'Check chop_blanks' );
 ok( $err->long_read_len == 80, 'Check long_read_len' );
 ok( ! $err->long_trunc_ok, 'Check long_trunc_ok' );
 ok( ! $err->taint, 'Check taint' );
-ok( $err->num_of_fields == 0, 'Check num_of_fields' );
+ok( $err->num_of_fields == 14, 'Check num_of_fields' );
 ok( $err->num_of_params == 0, 'Check num_of_params' );
 is( ref $err->field_names, 'ARRAY', "Check field_names" );
-is( ref $err->type, 'ARRAY', "Check type" );
-is( ref $err->precision, 'ARRAY', "Check precision" );
-is( ref $err->scale, 'ARRAY', "Check scale" );
+
+TODO: {
+    # These should be array refs, but ExampleP returns undef instead.
+    local $TODO = 'DBD::ExampleP should return references';
+    is( ref $err->type, 'ARRAY', "Check type" );
+    isa_ok( $err->precision, 'ARRAY', "Check precision" );
+    isa_ok( $err->scale, 'ARRAY', "Check scale" );
+    isa_ok( $err->param_values, 'HASH', "Check praram_values" );
+}
+
 is( ref $err->nullable, 'ARRAY', "Check nullable" );
 ok( ! defined $err->cursor_name, "Check cursor_name" );
-ok( ! defined $err->param_values, "Check praram_values" );
 is( $err->statement, 'select * from foo', 'Check statement' );
 ok( ! defined $err->rows_in_cache, "Check rows_in_cache" );
