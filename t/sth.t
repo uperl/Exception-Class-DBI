@@ -1,15 +1,15 @@
 #!/usr/bin/perl -w
 
-# $Id: sth.t,v 1.5 2002/08/23 18:27:36 david Exp $
+# $Id: sth.t,v 1.6 2002/08/23 19:24:53 david Exp $
 
 use strict;
 use Test::More (tests => 35);
 BEGIN { use_ok('Exception::Class::DBI') }
+# Use PurePerl to get around CursorName bug.
 BEGIN { $ENV{DBI_PUREPERL} = 2 }
 use DBI;
 
 ok( my $dbh = DBI->connect('dbi:ExampleP:dummy', '', '',
-#ok( my $dbh = DBI->connect('dbi:Pg:dbname=template1', 'postgres', '',
                            { PrintError => 0,
                              RaiseError => 0,
                              HandleError => Exception::Class::DBI->handler
@@ -49,7 +49,8 @@ ok( ! $err->compat_mode, 'Check compat_mode' );
 ok( ! $err->inactive_destroy, 'Check inactive_destroy' );
 
 {
-    # PurePerl->{TraceLevel} should return an integer, but it doesn't.
+    # PurePerl->{TraceLevel} should return an integer, but it doesn't. It
+    # returns undef instead.
     local $^W;
     ok( $err->trace_level == 0, 'Check trace_level' );
 }

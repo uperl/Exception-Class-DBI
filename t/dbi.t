@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: dbi.t,v 1.2 2002/08/23 00:55:45 david Exp $
+# $Id: dbi.t,v 1.3 2002/08/23 19:24:53 david Exp $
 
 use strict;
 use Test::More (tests => 14);
@@ -18,7 +18,7 @@ eval {
 ok( my $err = $@, "Catch exception" );
 SKIP: {
     # Remove this skip when DBI->connect uses exceptions.
-    skip 'HandleError not logic not yet used by DBI->connect', 6
+    skip 'HandleError not logic not yet used by DBI->connect', 12
       unless ref $@;
     isa_ok( $err, 'Exception::Class::DBI' );
     like( $err->error, qr{Can't connect\(dbi:Bogus   HASH\([^\)]+\)\), no database driver specified and DBI_DSN env var not set},
