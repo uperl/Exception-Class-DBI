@@ -5,4 +5,4 @@
 \.bak$
 ^MANIFEST\.SKIP$
 ^Exception-Class-DBI
-.svn
+\.svn
