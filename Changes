@@ -1,6 +1,6 @@
 Revision history for Perl extension Exception::Class::DBI.
 
-0.90
+0.90  Thu Dec 12 20:16:14 2002
         - Updated tests for Changes in DBI 1.30. Connection failures
           can now throw exceptions!
         - Removed TODO tests in sth.t. Tim has said that DBI attributes
