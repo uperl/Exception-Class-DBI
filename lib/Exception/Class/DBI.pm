@@ -1,6 +1,6 @@
 package Exception::Class::DBI;
 
-# $Id: DBI.pm,v 1.11 2004/06/17 17:43:29 david Exp $
+# $Id$
 
 use 5.00500;
 use strict;
@@ -546,12 +546,11 @@ when the exception is created.
 
 =head1 BUGS
 
-Report all bugs via the CPAN Request Tracker at
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Exception-Class-DBI>.
+Please send bug reports to <bug-exception-class-dbi@rt.cpan.org>.
 
 =head1 AUTHOR
 
-David Wheeler <david@wheeler.net>
+David Wheeler <david@kineticode.com>
 
 =head1 SEE ALSO
 
@@ -564,7 +563,7 @@ it. There's lots more information in these exception objects, so use them!
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2002-2003, David Wheeler. All Rights Reserved.
+Copyright (c) 2002-2004, David Wheeler. All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
