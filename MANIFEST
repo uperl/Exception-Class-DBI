@@ -4,5 +4,6 @@ Makefile.PL
 README
 lib/Exception/Class/DBI.pm
 t/dbh.t
+t/dbi.t
 t/drh.t
 t/sth.t

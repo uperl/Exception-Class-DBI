@@ -1,6 +1,6 @@
 package Exception::Class::DBI;
 
-# $Id: DBI.pm,v 1.2 2002/08/22 06:05:02 david Exp $
+# $Id: DBI.pm,v 1.3 2002/08/22 17:34:56 david Exp $
 
 use 5.00500;
 use strict;
@@ -47,7 +47,7 @@ use Exception::Class ( 'Exception::Class::DBI' =>
 sub handler {
     sub {
         my ($err, $dbh, $retval) = @_;
-        if ($dbh) {
+        if (ref $dbh) {
             # Assemble arguments for a handle exception.
             my @params = ( error               => $err,
                             errstr              => $dbh->errstr,
@@ -100,14 +100,25 @@ sub handler {
                 die Exception::Class::DBI::Unknown->new(@params);
             }
         } else {
-            # Unknown exception. This shouldn't happen.
-            die Exception::Class::DBI::Unknown->new
-              ( error  => $err,
-                errstr => $DBI::errstr,
-                err    => $DBI::err,
-                state  => $DBI::state,
-                retval => $retval
-              );
+            # Set up for a base class exception.
+            my $exc = 'Exception::Class::DBI';
+            # Make it an unknown exception if $dbh isn't a DBI class name.
+            $exc .= '::Unknown' unless $dbh and UNIVERSAL::isa($dbh, 'DBI');
+            my @params;
+            if ($DBI::lasth) {
+                # There was a handle. Get the errors.
+                die $exc->new( error  => $err,
+                               errstr => $DBI::errstr,
+                               err    => $DBI::err,
+                               state  => $DBI::state,
+                               retval => $retval
+                             );
+            } else {
+                # No handle, no errors.
+                die $exc->new( error  => $err,
+                               retval => $retval
+                             );
+            }
         }
     };
 }
@@ -183,7 +194,7 @@ C<HandleError> attribute. When DBI encounters an error, it checks its
 C<PrintError>, C<RaiseError>, and C<HandleError> attributes to decide what to
 do about it. When C<HandleError> has been set to a code reference, DBI
 executes it, passing it the error string that would be printed for
-C<PrintError> the DBI handle object that was executing the method call that
+C<PrintError>, the DBI handle object that was executing the method call that
 triggered the error, and the return value of that method call (usually
 C<undef>). Using these arguments, the code reference provided by C<handler()>
 determines what type of exception to throw. Exception::Class::DBI contains the
@@ -195,11 +206,10 @@ error.
 =head1 CLASSES
 
 Exception::Class::DBI creates a number of exception classes, each one specific
-to a particular DBI error context. Most of the methods described below
-correspond to their like-named methods and/or attributes in the DBI
-itself. Where they don't, I refer to the appropriate DBI method or
-attribute. Thus the documentation below summarizes the DBI documentation, so
-you should refer to L<DBI|DBI> itself for more in-depth information.
+to a particular DBI error context. Most of the object methods described below
+correspond to like-named attributes in the DBI itself. Thus the documentation
+below summarizes the DBI attribute documentation, so you should refer to
+L<DBI|DBI> itself for more in-depth information.
 
 =head2 Exception::Class::DBI
 
@@ -208,7 +218,11 @@ Exception::Class::DBI. It offers the several object methods in addition to
 those it inherits from I<its> parent, Exception::Class::Base. These methods
 correspond to the L<DBI dynamic attributes|DBI/"DBI Dynamic Attributes">, as
 well as to the values passed to the C<handler()> exception handler via the DBI
-C<HandleError> attribute.
+C<HandleError> attribute. Exceptions of this base class are only thrown when
+there is no DBI handle object executing, e.g. in the DBI C<connect()>
+method. B<Note:> This functionality is not yet implemented in DBI -- see the
+discusion that starts here:
+L<http://archive.develooper.com/dbi-dev@perl.org/msg01438.html>.
 
 =over 4
 
@@ -520,8 +534,8 @@ STH exceptions.
 
 Also the DBI itself needs to be patched to execute the C<HandlError> code
 reference on a connection failure. I've submitted such a patch; we'll see if
-it gets accepted. Read all about it in the dbi-users mailing list archive:
-L<http://archive.develooper.com/dbi-users@perl.org/>
+it gets accepted. Read all about it in the dbi-dev mailing list archive:
+L<http://archive.develooper.com/dbi-dev@perl.org/msg01438.html>.
 
 =head1 BUGS
 
