@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: Makefile.PL,v 1.5 2002/08/22 17:51:49 david Exp $
+# $Id: Makefile.PL,v 1.6 2002/08/23 19:54:56 david Exp $
 
 use strict;
 use ExtUtils::MakeMaker;
@@ -9,7 +9,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     'NAME'		=> 'Exception::Class::DBI',
     'VERSION_FROM'	=> 'lib/Exception/Class/DBI.pm', # finds $VERSION
-    'PREREQ_PM'		=> { 'Exception::Class' => 1.03,
+    'PREREQ_PM'		=> { 'Exception::Class' => 1.02,
                              'DBI' => 1.28,
                              'Test::Simple' => 0.40, # Need Test::More
                            }, # e.g., Module::Name => 1.1
