@@ -1,5 +1,7 @@
 #!/usr/bin/perl -w
 
+# $Id: drh.t,v 1.4 2002/08/22 16:10:24 david Exp $
+
 use strict;
 use Test::More (tests => 21);
 BEGIN { use_ok('Exception::Class::DBI') }
@@ -26,11 +28,9 @@ SKIP: {
     skip 'HandleError not logic not yet used by DBI->connect', 20
       unless $@;
     ok( my $err = $@, "Caught exception" );
-    ok( UNIVERSAL::isa($err, 'Exception::Class::DBI'), "Check E::C::DBI" );
-    ok( UNIVERSAL::isa($err, 'Exception::Class::DBI::H'),
-        "Check E::C::DBI::H" );
-    ok( UNIVERSAL::isa($err, 'Exception::Class::DBI::DRH'),
-        "Check E::C::DBI::DRH" );
+    isa_ok( $err, 'Exception::Class::DBI' );
+    isa_ok( $err, 'Exception::Class::DBI::H' );
+    isa_ok( $err, 'Exception::Class::DBI::DRH' );
     ok( $err->err == 7, "Check err" );
     is( $err->error,
         'DBI->connect(dummy) failed: Dammit Jim!', 'Check error' );

@@ -1,5 +1,7 @@
 #!/usr/bin/perl -w
 
+# $Id: dbh.t,v 1.3 2002/08/22 16:10:24 david Exp $
+
 use strict;
 use Test::More (tests => 27);
 BEGIN { use_ok('Exception::Class::DBI') }
@@ -15,7 +17,7 @@ ok( my $dbh = DBI->connect('dbi:ExampleP:dummy', '', '',
 END { $dbh->disconnect if $dbh };
 
 # Check that the error_handler has been installed.
-ok( UNIVERSAL::isa($dbh->{HandleError}, 'CODE'), "Check HandlError" );
+isa_ok( $dbh->{HandleError}, 'CODE' );
 
 # Trigger an exception.
 eval {
@@ -24,11 +26,9 @@ eval {
 
 # Make sure we got the proper exception.
 ok( my $err = $@, "Get exception" );
-ok( UNIVERSAL::isa($err, 'Exception::Class::DBI'), "Check E::C::DBI" );
-ok( UNIVERSAL::isa($err, 'Exception::Class::DBI::H'),
-    "Check E::C::DBI::H" );
-ok( UNIVERSAL::isa($err, 'Exception::Class::DBI::DBH'),
-    "Check E::C::DBI::DBH" );
+isa_ok( $err, 'Exception::Class::DBI' );
+isa_ok( $err, 'Exception::Class::DBI::H' );
+isa_ok( $err, 'Exception::Class::DBI::DBH' );
 
 # Check the accessor values.
 ok( $err->err == 1, "Check err" );
