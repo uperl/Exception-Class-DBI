@@ -1,5 +1,8 @@
 Revision history for Perl extension Exception::Class::DBI.
 
+0.92  2004-06-17T17:42:37
+        - Fixed test that was breaking with newer versions of DBI.
+
 0.91  Tue Aug 26 02:25:56 2003
         - Switched to Module::Build.
         - Throwing exceptions with the "throw()" method, rather than

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: sth.t,v 1.7 2002/12/12 20:15:48 david Exp $
+# $Id: sth.t,v 1.8 2004/06/17 17:43:29 david Exp $
 
 use strict;
 use Test::More (tests => 35);
@@ -36,8 +36,9 @@ isa_ok( $err, 'Exception::Class::DBI::STH' );
 ok( $err->err == 2, "Check err" );
 is( $err->errstr, 'opendir(foo): No such file or directory',
     "Check errstr" );
-is( $err->error, 'DBD::ExampleP::st execute failed: opendir(foo): No such '.
-    "file or directory\n", "Check error" );
+like( $err->error,
+      qr/^DBD::ExampleP::st execute failed: opendir\(foo\): No such file or directory/,
+      "Check error" );
 is( $err->state, 'S1000', "Check state" );
 ok( ! defined $err->retval, "Check retval" );
 

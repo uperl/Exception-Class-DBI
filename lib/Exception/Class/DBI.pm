@@ -1,12 +1,12 @@
 package Exception::Class::DBI;
 
-# $Id: DBI.pm,v 1.10 2003/08/26 02:24:44 david Exp $
+# $Id: DBI.pm,v 1.11 2004/06/17 17:43:29 david Exp $
 
 use 5.00500;
 use strict;
 use Exception::Class;
 use vars qw($VERSION);
-$VERSION = '0.91';
+$VERSION = '0.92';
 
 use Exception::Class ( 'Exception::Class::DBI' =>
                        { description => 'DBI exception',

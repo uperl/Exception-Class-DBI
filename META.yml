@@ -1,18 +1,18 @@
 --- #YAML:1.0
 name: Exception-Class-DBI
-version: 0.91
+version: 0.92
+author:
+  - David Wheeler <david@wheeler.net>
+abstract: DBI Exception objects
 license: perl
-distribution_type: module
 requires:
   DBI: 1.28
   Exception::Class: 1.02
-recommends: {}
 build_requires:
   Test::Harness: 2.03
   Test::Simple: 0.17
-conflicts: {}
 provides:
   Exception::Class::DBI:
     file: lib/Exception/Class/DBI.pm
-    version: 0.91
-generated_by: Module::Build version 0.19_05
+    version: 0.92
+generated_by: Module::Build version 0.25_01
