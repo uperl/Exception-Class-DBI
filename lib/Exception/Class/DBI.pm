@@ -1,12 +1,12 @@
 package Exception::Class::DBI;
 
-# $Id: DBI.pm,v 1.9 2002/12/12 20:19:48 david Exp $
+# $Id: DBI.pm,v 1.10 2003/08/26 02:24:44 david Exp $
 
 use 5.00500;
 use strict;
 use Exception::Class;
 use vars qw($VERSION);
-$VERSION = '0.90';
+$VERSION = '0.91';
 
 use Exception::Class ( 'Exception::Class::DBI' =>
                        { description => 'DBI exception',
@@ -69,10 +69,10 @@ sub handler {
                          );
             if (UNIVERSAL::isa($dbh, 'DBI::dr')) {
                 # Just throw a driver exception. It has no extra attributes.
-                die Exception::Class::DBI::DRH->new(@params);
+                Exception::Class::DBI::DRH->throw(@params);
             } elsif (UNIVERSAL::isa($dbh, 'DBI::db')) {
                 # Throw a database handle exception.
-                die Exception::Class::DBI::DBH->new
+                Exception::Class::DBI::DBH->throw
                   ( @params,
                     auto_commit    => $dbh->{AutoCommit},
                     db_name        => $dbh->{Name},
@@ -81,7 +81,7 @@ sub handler {
                   );
             } elsif (UNIVERSAL::isa($dbh, 'DBI::st')) {
                 # Throw a statement handle exception.
-                die Exception::Class::DBI::STH->new
+                Exception::Class::DBI::STH->throw
                   ( @params,
                     num_of_fields => $dbh->{NUM_OF_FIELDS},
                     num_of_params => $dbh->{NUM_OF_PARAMS},
@@ -97,7 +97,7 @@ sub handler {
                   );
             } else {
                 # Unknown exception. This shouldn't happen.
-                die Exception::Class::DBI::Unknown->new(@params);
+                Exception::Class::DBI::Unknown->throw(@params);
             }
         } else {
             # Set up for a base class exception.
@@ -108,17 +108,17 @@ sub handler {
             if ($DBI::lasth) {
                 # There was a handle. Get the errors. This may be superfluous,
                 # since the handle ought to be in $dbh.
-                die $exc->new( error  => $err,
-                               errstr => $DBI::errstr,
-                               err    => $DBI::err,
-                               state  => $DBI::state,
-                               retval => $retval
-                             );
+                $exc->throw( error  => $err,
+                             errstr => $DBI::errstr,
+                             err    => $DBI::err,
+                             state  => $DBI::state,
+                             retval => $retval
+                           );
             } else {
                 # No handle, no errors.
-                die $exc->new( error  => $err,
-                               retval => $retval
-                             );
+                $exc->throw( error  => $err,
+                             retval => $retval
+                           );
             }
         }
     };
@@ -526,11 +526,23 @@ attributes seemed redundant. But if folks think it makes sense to include the
 missing attributes for the sake of completeness, let me know. Enough interest
 will motivate me to get them in.
 
-=item TO DO
+=head1 TO DO
+
+=over 4
+
+=item *
 
 I need to figure out a non-database specific way of testing STH exceptions.
 DBD::ExampleP works well for DRH and DBH exceptions, but not so well for
 STH exceptions.
+
+=item *
+
+Change the model to merely store a reference to the DBI handle and get its
+attributes only when methods are called, rather than grabbing them all at once
+when the exception is created.
+
+=back
 
 =head1 BUGS
 
@@ -552,7 +564,7 @@ it. There's lots more information in these exception objects, so use them!
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2002, David Wheeler. All Rights Reserved.
+Copyright (c) 2002-2003, David Wheeler. All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.

@@ -1,4 +1,4 @@
-Exception/Class/DBI version 0.90
+Exception/Class/DBI version 0.91
 ================================
 
 This module offers a set of DBI-specific exception classes. They inherit from
@@ -18,7 +18,14 @@ used to output detailed output in the event of an exception.
 
 INSTALLATION
 
-To install this module type the following:
+To install this module, type the following:
+
+   perl Build.PL
+   ./Build
+   ./Build test
+   ./Build install
+
+Or, if you don't have Module::Build installed, type the following:
 
    perl Makefile.PL
    make
@@ -35,7 +42,7 @@ This module requires these other modules and libraries:
 
 COPYRIGHT AND LICENCE
 
-Copyright (c) 2002, David Wheeler. All Rights Reserved.
+Copyright (c) 2002-2003, David Wheeler. All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.

@@ -1,5 +1,12 @@
 Revision history for Perl extension Exception::Class::DBI.
 
+0.91  
+        - Switched to Module::Build.
+        - Throwing exceptions with the "throw()" method, rather than
+          die'ing with the construction of exceptions with the "net()"
+          constructor.
+        - Added POD tests.
+
 0.90  Thu Dec 12 20:16:14 2002
         - Updated tests for Changes in DBI 1.30. Connection failures
           can now throw exceptions!
