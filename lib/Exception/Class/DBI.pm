@@ -1,6 +1,6 @@
 package Exception::Class::DBI;
 
-# $Id: DBI.pm,v 1.6 2002/08/23 20:11:01 david Exp $
+# $Id: DBI.pm,v 1.7 2002/09/15 17:52:53 david Exp $
 
 use 5.00500;
 use strict;
@@ -159,9 +159,9 @@ Exception::Class::DBI - DBI Exception objects
 =head1 DESCRIPTION
 
 This module offers a set of DBI-specific exception classes. They inherit from
-Exception::Class::Base, the base class for all exception objects created by
-the Exception::Class module from the CPAN. Exception::Class::DBI itself offers
-a single class method, C<handler()>, that returns a code reference appropriate
+Exception::Class, the base class for all exception objects created by the
+Exception::Class module from the CPAN. Exception::Class::DBI itself offers a
+single class method, C<handler()>, that returns a code reference appropriate
 for passing the DBI C<HandleError> attribute.
 
 The exception classes created by Exception::Class::DBI are designed to be
@@ -170,13 +170,13 @@ and passed to the DBI C<HandleError> attribute determines the context,
 assembles the necessary metadata, and throws the apopropriate exception.
 
 Each of the Exception::Class::DBI classes offers a set of object accessor
-methods in addition to those provided by Exception::Class::Base. These can be
-used to output detailed output in the event of an exception.
+methods in addition to those provided by Exception::Class. These can be used
+to output detailed output in the event of an exception.
 
 =head1 INTERFACE
 
-Exception::Class::DBI inherits from Exception::Class::Base, and thus its
-entire interface. Refer to the Exception::Class documentation for details.
+Exception::Class::DBI inherits from Exception::Class, and thus its entire
+interface. Refer to the Exception::Class documentation for details.
 
 =head2 Class Method
 
@@ -216,7 +216,7 @@ L<DBI|DBI> itself for more in-depth information.
 
 All of the Exception::Class::DBI classes documented below inherit from
 Exception::Class::DBI. It offers the several object methods in addition to
-those it inherits from I<its> parent, Exception::Class::Base. These methods
+those it inherits from I<its> parent, Exception::Class. These methods
 correspond to the L<DBI dynamic attributes|DBI/"DBI Dynamic Attributes">, as
 well as to the values passed to the C<handler()> exception handler via the DBI
 C<HandleError> attribute. Exceptions of this base class are only thrown when
@@ -231,10 +231,9 @@ L<http://archive.develooper.com/dbi-dev@perl.org/msg01438.html>.
 
   my $error = $ex->error;
 
-Exception::Class::DBI actually inherits this method from
-Exception::Class::Base. It contains the error string that DBI prints when its
-C<PrintError> attribute is enabled, or C<die>s with when its <RaiseError>
-attribute is enabled.
+Exception::Class::DBI actually inherits this method from Exception::Class. It
+contains the error string that DBI prints when its C<PrintError> attribute is
+enabled, or C<die>s with when its <RaiseError> attribute is enabled.
 
 =item C<err>
 
@@ -549,8 +548,7 @@ L<DBI|DBI>, so it pays to be familiar with its documentation.
 
 See the documentation for Dave Rolsky's L<Exception::Class|Exception::Class>
 module for details on the methods this module's classes inherit from
-Exception::Class::Base. There's lots more information in these exception
-objects, so use them!
+it. There's lots more information in these exception objects, so use them!
 
 =head1 COPYRIGHT AND LICENSE
 
