@@ -1,6 +1,6 @@
 package Exception::Class::DBI;
 
-# $Id: DBI.pm,v 1.3 2002/08/22 17:34:56 david Exp $
+# $Id: DBI.pm,v 1.4 2002/08/22 17:36:39 david Exp $
 
 use 5.00500;
 use strict;
@@ -104,9 +104,9 @@ sub handler {
             my $exc = 'Exception::Class::DBI';
             # Make it an unknown exception if $dbh isn't a DBI class name.
             $exc .= '::Unknown' unless $dbh and UNIVERSAL::isa($dbh, 'DBI');
-            my @params;
             if ($DBI::lasth) {
-                # There was a handle. Get the errors.
+                # There was a handle. Get the errors. This may be superfluous,
+                # since the handle ought to be in $dbh.
                 die $exc->new( error  => $err,
                                errstr => $DBI::errstr,
                                err    => $DBI::err,
