@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: sth.t,v 1.4 2002/08/23 18:26:26 david Exp $
+# $Id: sth.t,v 1.5 2002/08/23 18:27:36 david Exp $
 
 use strict;
 use Test::More (tests => 35);
@@ -73,6 +73,8 @@ TODO: {
 }
 
 is( ref $err->nullable, 'ARRAY', "Check nullable" );
+# ExampleP fails to get the CursorName attribute under DBI. Which is
+# why this test is using PurePerl, instead.
 ok( ! defined $err->cursor_name, "Check cursor_name" );
 is( $err->statement, 'select * from foo', 'Check statement' );
 ok( ! defined $err->rows_in_cache, "Check rows_in_cache" );
