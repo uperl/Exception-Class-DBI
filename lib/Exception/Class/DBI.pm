@@ -1,12 +1,12 @@
 package Exception::Class::DBI;
 
-# $Id: DBI.pm,v 1.5 2002/08/22 17:37:31 david Exp $
+# $Id: DBI.pm,v 1.6 2002/08/23 20:11:01 david Exp $
 
 use 5.00500;
 use strict;
 use Exception::Class;
 use vars qw($VERSION);
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use Exception::Class ( 'Exception::Class::DBI' =>
                        { description => 'DBI exception',
@@ -532,11 +532,6 @@ will motivate me to get them in.
 I need to figure out a non-database specific way of testing STH exceptions.
 DBD::ExampleP works well for DRH and DBH exceptions, but not so well for
 STH exceptions.
-
-Also the DBI itself needs to be patched to execute the C<HandlError> code
-reference on a connection failure. I've submitted such a patch; we'll see if
-it gets accepted. Read all about it in the dbi-dev mailing list archive:
-L<http://archive.develooper.com/dbi-dev@perl.org/msg01438.html>.
 
 =head1 BUGS
 
