@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: Makefile.PL,v 1.3 2002/08/22 16:10:24 david Exp $
+# $Id: Makefile.PL,v 1.4 2002/08/22 17:49:05 david Exp $
 
 use strict;
 use ExtUtils::MakeMaker;
@@ -10,7 +10,8 @@ WriteMakefile(
     'NAME'		=> 'Exception::Class::DBI',
     'VERSION_FROM'	=> 'lib/Exception/Class/DBI.pm', # finds $VERSION
     'PREREQ_PM'		=> { 'Exception::Class' => 1.03,
-                             'DBI' => 1.28
+                             'DBI' => 1.28,
+                             'Test::Simple' => 0.17, # Need Test::More
                            }, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?    ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM => 'lib/Exception/Class/DBI.pm', # retrieve abstract from module
