@@ -1,6 +1,6 @@
 package Exception::Class::DBI;
 
-# $Id: DBI.pm,v 1.8 2002/12/12 20:15:48 david Exp $
+# $Id: DBI.pm,v 1.9 2002/12/12 20:19:48 david Exp $
 
 use 5.00500;
 use strict;
@@ -162,7 +162,7 @@ This module offers a set of DBI-specific exception classes. They inherit from
 Exception::Class, the base class for all exception objects created by the
 Exception::Class module from the CPAN. Exception::Class::DBI itself offers a
 single class method, C<handler()>, that returns a code reference appropriate
-for passing the DBI C<HandleError> attribute.
+for passing to the DBI C<HandleError> attribute.
 
 The exception classes created by Exception::Class::DBI are designed to be
 thrown in certain DBI contexts; the code reference returned by C<handler()>
