@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: sth.t,v 1.6 2002/08/23 19:24:53 david Exp $
+# $Id: sth.t,v 1.7 2002/12/12 20:15:48 david Exp $
 
 use strict;
 use Test::More (tests => 35);
@@ -64,14 +64,12 @@ ok( $err->num_of_fields == 14, 'Check num_of_fields' );
 ok( $err->num_of_params == 0, 'Check num_of_params' );
 is( ref $err->field_names, 'ARRAY', "Check field_names" );
 
-TODO: {
-    # These should be array refs, but ExampleP returns undef instead.
-    local $TODO = 'DBD::ExampleP should return references';
-    is( ref $err->type, 'ARRAY', "Check type" );
-    isa_ok( $err->precision, 'ARRAY', "Check precision" );
-    isa_ok( $err->scale, 'ARRAY', "Check scale" );
-    isa_ok( $err->param_values, 'HASH', "Check praram_values" );
-}
+# These tend to return undef. Probably ought to try to add tests to make
+# sure that they have array refs when they're supposed to.
+ok( ! defined $err->type, "Check type" ); # isa ARRAY
+ok( ! defined $err->precision, "Check precision" ); # isa ARRAY
+isa_ok( $err->scale, 'ARRAY', "Check scale" );
+ok( ! defined $err->param_values, "Check praram_values" ); # isa HASH
 
 is( ref $err->nullable, 'ARRAY', "Check nullable" );
 # ExampleP fails to get the CursorName attribute under DBI. Which is

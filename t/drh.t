@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: drh.t,v 1.4 2002/08/22 16:10:24 david Exp $
+# $Id: drh.t,v 1.5 2002/12/12 20:15:48 david Exp $
 
 use strict;
 use Test::More (tests => 21);
@@ -26,14 +26,14 @@ eval {
 
 SKIP: {
     skip 'HandleError not logic not yet used by DBI->connect', 20
-      unless $@;
+      unless $DBI::VERSION gt '1.30';
     ok( my $err = $@, "Caught exception" );
     isa_ok( $err, 'Exception::Class::DBI' );
     isa_ok( $err, 'Exception::Class::DBI::H' );
     isa_ok( $err, 'Exception::Class::DBI::DRH' );
     ok( $err->err == 7, "Check err" );
-    is( $err->error,
-        'DBI->connect(dummy) failed: Dammit Jim!', 'Check error' );
+    is( $err->error, "DBI connect('dummy','',...) failed: Dammit Jim!",
+        'Check error' );
     is( $err->errstr, 'Dammit Jim!', 'Check errstr' );
     is( $err->state, 'ABCDE', 'Check state' );
     ok( ! defined $err->retval, "Check retval" );

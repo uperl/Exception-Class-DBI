@@ -1,6 +1,14 @@
 Revision history for Perl extension Exception::Class::DBI.
 
-0.02
+0.90
+        - Updated tests for Changes in DBI 1.30. Connection failures
+          can now throw exceptions!
+        - Removed TODO tests in sth.t. Tim has said that DBI attributes
+          that return ARRAYs or HASHes will return undef when they're
+          empty, rather than return emtpy ARRAYs or HASHes.
+        - Incremented version to 0.90 to indicate high level of stability.
+
+0.02  Tue Sep 17 03:33:56 2002
         - Documentation tweaks.
         - Fixed test to pass with Perl 5.6.1 and earlier.
 
