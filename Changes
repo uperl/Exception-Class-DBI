@@ -2,6 +2,7 @@ Revision history for Perl extension Exception::Class::DBI.
 
 0.02
         - Documentation tweaks.
+        - Fixed test to pass with Perl 5.6.1 and earlier.
 
 0.01  Fri Aug 23 19:50:45 2002
 	- Initial Release to the CPAN.

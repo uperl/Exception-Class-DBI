@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: dbh.t,v 1.4 2002/08/25 16:18:29 david Exp $
+# $Id: dbh.t,v 1.5 2002/09/17 03:32:47 david Exp $
 
 use strict;
 use Test::More (tests => 27);
@@ -39,10 +39,13 @@ is( $err->state, 'S1000', "Check state" );
 ok( ! defined $err->retval, "Check retval" );
 ok( $err->warn == 1, "Check warn" );
 ok( $err->active == 1, "Check active" );
-# For some reason, $dbh->{Kids} returns a different value on Linux than
-# elsewhere. The same might be true on other platforms. Not sure why that
-# is...
-ok( $err->kids == ($^O eq 'linux' ? 1 : 0), "Check kids" );
+# For some reason, under perl < 5.8.0, $dbh->{Kids} returns a different value
+# inside the HandleError scope than it does outside that scope. So we're
+# checking for the perl version here to cover our butts on this test. This may
+# be fixed in the DBI soon. I'm using the old form of the Perl version number
+# as it seems safer with older Perls.
+#ok( $err->kids == ($^V lt v5.8 ? 1 : 0), "Check kids" );
+ok( $err->kids == ($] < 5.008 ? 1 : 0), "Check kids" );
 ok( $err->active_kids == 0, "Check active_kids" );
 ok( ! $err->inactive_destroy, "Check inactive_destroy" );
 ok( $err->trace_level == 0, "Check trace_level" );
