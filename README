@@ -1,16 +1,20 @@
 Exception/Class/DBI version 0.01
 ================================
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+This module offers a set of DBI-specific exception classes. They inherit from
+Exception::Class::Base, the base class for all exception objects created by
+the Exception::Class module from the CPAN. Exception::Class::DBI itself offers
+a single class method, C<handler()>, that returns a code reference appropriate
+for passing the DBI C<HandleError> attribute.
 
-A README file is required for CPAN modules since CPAN extracts the
-README file from a module distribution so that people browsing the
-archive can use it get an idea of the modules uses. It is usually a
-good idea to provide version information here so that people can
-decide whether fixes for the module are worth downloading.
+The exception classes created by Exception::Class::DBI are designed to be
+thrown in certain DBI contexts; the code reference returned by handler() and
+passed to the DBI C<HandleError> attribute determines the context, assembles
+the necessary metadata, and throws the apopropriate exception.
+
+Each of the Exception::Class::DBI classes offers a set of object accessor
+methods in addition to those provided by Exception::Class::Base. These can be
+used to output detailed output in the event of an exception.
 
 INSTALLATION
 
@@ -25,11 +29,13 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
-  blah blah blah
+  DBI 1.28 or later (1.30 or later strongly recommended).
+  Exception::Class 1.02 or later.
 
 COPYRIGHT AND LICENCE
 
-Put the correct copyright and licence information here.
+Copyright (c) 2002, David Wheeler. All Rights Reserved.
 
-Copyright (C) 2002 A. U. Thor blah blah blah
+This module is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
 
