@@ -9,7 +9,7 @@ use DBI;
     # Fake out DBD::ExampleP's connect method. Take the opportunity
     # to set the dynamic attributes.
     use DBD::ExampleP;
-    no warnings;
+    local $^W;
     *DBD::ExampleP::dr::connect =
       sub { $_[0]->set_err(7, 'Dammit Jim!', 'ABCDE') };
 }
