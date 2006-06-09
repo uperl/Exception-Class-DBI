@@ -9,4 +9,5 @@ t/dbh.t
 t/dbi.t
 t/drh.t
 t/sth.t
+t/subclass.t
 t/z_pod.t

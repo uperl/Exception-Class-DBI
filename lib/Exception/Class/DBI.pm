@@ -11,45 +11,50 @@ $VERSION = '0.93';
 use Exception::Class (
     'Exception::Class::DBI' => {
         description => 'DBI exception',
-        fields => [qw(err errstr state retval)]
+        fields      => [qw(err errstr state retval)]
     },
 
     'Exception::Class::DBI::Unknown' => {
-        isa => 'Exception::Class::DBI',
+        isa         => 'Exception::Class::DBI',
         description => 'DBI unknown exception'
     },
 
     'Exception::Class::DBI::H' => {
-        isa => 'Exception::Class::DBI',
+        isa         => 'Exception::Class::DBI',
         description => 'DBI handle exception',
-        fields => [qw(warn active kids active_kids compat_mode
-                      inactive_destroy trace_level fetch_hash_key_name
-                      chop_blanks long_read_len long_trunc_ok taint
-                  )]
+        fields      => [qw(warn active kids active_kids compat_mode
+                           inactive_destroy trace_level fetch_hash_key_name
+                           chop_blanks long_read_len long_trunc_ok taint
+        )],
     },
 
     'Exception::Class::DBI::DRH' => {
-        isa => 'Exception::Class::DBI::H',
+        isa         => 'Exception::Class::DBI::H',
         description => 'DBI driver handle exception',
     },
 
     'Exception::Class::DBI::DBH' => {
-        isa => 'Exception::Class::DBI::H',
+        isa         => 'Exception::Class::DBI::H',
         description => 'DBI database handle exception',
-        fields => [qw(auto_commit db_name statement row_cache_size)]
+        fields      => [qw(auto_commit db_name statement row_cache_size)]
     },
 
     'Exception::Class::DBI::STH' => {
-        isa => 'Exception::Class::DBI::H',
+        isa         => 'Exception::Class::DBI::H',
         description => 'DBI statment handle exception',
-        fields => [qw(num_of_fields num_of_params field_names type precision
-                      scale nullable cursor_name param_values statement
-                      rows_in_cache
-                  )]
+        fields       => [qw(num_of_fields num_of_params field_names type
+                            precision scale nullable cursor_name param_values
+                            statement rows_in_cache
+        )],
     }
 );
 
 sub handler {
+    my $pkg = shift;
+    my %class_for = map {
+        eval "require $pkg\::$_";
+        $_ => $@ ? __PACKAGE__ . "::$_" : "$pkg\::$_";
+    } qw(H DRH DBH STH Unknown);
     sub {
         my ($err, $dbh, $retval) = @_;
         if (ref $dbh) {
@@ -75,10 +80,10 @@ sub handler {
             );
             if (UNIVERSAL::isa($dbh, 'DBI::dr')) {
                 # Just throw a driver exception. It has no extra attributes.
-                Exception::Class::DBI::DRH->throw(@params);
+                $class_for{DRH}->throw(@params);
             } elsif (UNIVERSAL::isa($dbh, 'DBI::db')) {
                 # Throw a database handle exception.
-                Exception::Class::DBI::DBH->throw(
+                $class_for{DBH}->throw(
                     @params,
                     auto_commit    => $dbh->{AutoCommit},
                     db_name        => $dbh->{Name},
@@ -87,7 +92,7 @@ sub handler {
                 );
             } elsif (UNIVERSAL::isa($dbh, 'DBI::st')) {
                 # Throw a statement handle exception.
-                Exception::Class::DBI::STH->throw(
+                $class_for{STH}->throw(
                     @params,
                     num_of_fields => $dbh->{NUM_OF_FIELDS},
                     num_of_params => $dbh->{NUM_OF_PARAMS},
@@ -103,14 +108,14 @@ sub handler {
                 );
             } else {
                 # Unknown exception. This shouldn't happen.
-                Exception::Class::DBI::Unknown->throw(@params);
+                $class_for{Unknown}->throw(@params);
             }
         } else {
             # Set up for a base class exception.
-            my $exc = 'Exception::Class::DBI';
+            my $exc = $pkg;
             # Make it an unknown exception if $dbh isn't a DBI class
             # name. Probably shouldn't happen.
-            $exc .= '::Unknown' unless $dbh and UNIVERSAL::isa($dbh, 'DBI');
+            $class_for{Unknown} unless eval { $dbh->isa($dbh, 'DBI') };
             if ($DBI::lasth) {
                 # There was a handle. Get the errors. This may be superfluous,
                 # since the handle ought to be in $dbh.
