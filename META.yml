@@ -1,10 +1,12 @@
---- #YAML:1.0
+---
 name: Exception-Class-DBI
-version: 0.92
+version: 0.93
 author:
-  - David Wheeler <david@wheeler.net>
+  - 'David Wheeler <david@kineticode.com>'
 abstract: DBI Exception objects
 license: perl
+resources:
+  license: http://dev.perl.org/licenses/
 requires:
   DBI: 1.28
   Exception::Class: 1.02
@@ -14,5 +16,14 @@ build_requires:
 provides:
   Exception::Class::DBI:
     file: lib/Exception/Class/DBI.pm
-    version: 0.92
-generated_by: Module::Build version 0.25_01
+    version: 0.93
+  Exception::Class::DBI::DBH:
+    file: lib/Exception/Class/DBI.pm
+  Exception::Class::DBI::H:
+    file: lib/Exception/Class/DBI.pm
+  Exception::Class::DBI::STH:
+    file: lib/Exception/Class/DBI.pm
+generated_by: Module::Build version 0.2801
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2

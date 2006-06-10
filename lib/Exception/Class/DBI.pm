@@ -11,7 +11,7 @@ $VERSION = '0.93';
 use Exception::Class (
     'Exception::Class::DBI' => {
         description => 'DBI exception',
-        fields      => [qw(err errstr state retval)]
+        fields      => [qw(err errstr state retval handle)]
     },
 
     'Exception::Class::DBI::Unknown' => {
@@ -22,10 +22,6 @@ use Exception::Class (
     'Exception::Class::DBI::H' => {
         isa         => 'Exception::Class::DBI',
         description => 'DBI handle exception',
-        fields      => [qw(warn active kids active_kids compat_mode
-                           inactive_destroy trace_level fetch_hash_key_name
-                           chop_blanks long_read_len long_trunc_ok taint
-        )],
     },
 
     'Exception::Class::DBI::DRH' => {
@@ -36,120 +32,119 @@ use Exception::Class (
     'Exception::Class::DBI::DBH' => {
         isa         => 'Exception::Class::DBI::H',
         description => 'DBI database handle exception',
-        fields      => [qw(auto_commit db_name statement row_cache_size)]
     },
 
     'Exception::Class::DBI::STH' => {
         isa         => 'Exception::Class::DBI::H',
         description => 'DBI statment handle exception',
-        fields       => [qw(num_of_fields num_of_params field_names type
-                            precision scale nullable cursor_name param_values
-                            statement rows_in_cache
-        )],
     }
 );
 
 sub handler {
     my $pkg = shift;
-    my %class_for = map {
-        eval "require $pkg\::$_";
-        $_ => $@ ? __PACKAGE__ . "::$_" : "$pkg\::$_";
-    } qw(H DRH DBH STH Unknown);
-    sub {
-        my ($err, $dbh, $retval) = @_;
-        if (ref $dbh) {
-            # Assemble arguments for a handle exception.
-            my @params = (
-                error               => $err,
-                errstr              => $dbh->errstr,
-                err                 => $dbh->err,
-                state               => $dbh->state,
-                retval              => $retval,
-                warn                => $dbh->{Warn},
-                active              => $dbh->{Active},
-                kids                => $dbh->{Kids},
-                active_kids         => $dbh->{ActiveKids},
-                compat_mode         => $dbh->{CompatMode},
-                inactive_destroy    => $dbh->{InactiveDestroy},
-                trace_level         => $dbh->{TraceLevel},
-                fetch_hash_key_name => $dbh->{FetchHashKeyName},
-                chop_blanks         => $dbh->{ChopBlanks},
-                long_read_len       => $dbh->{LongReadLen},
-                long_trunc_ok       => $dbh->{LongTruncOk},
-                taint               => $dbh->{Taint},
-            );
-            if (UNIVERSAL::isa($dbh, 'DBI::dr')) {
-                # Just throw a driver exception. It has no extra attributes.
-                $class_for{DRH}->throw(@params);
-            } elsif (UNIVERSAL::isa($dbh, 'DBI::db')) {
-                # Throw a database handle exception.
-                $class_for{DBH}->throw(
-                    @params,
-                    auto_commit    => $dbh->{AutoCommit},
-                    db_name        => $dbh->{Name},
-                    statement      => $dbh->{Statement},
-                    row_cache_size => $dbh->{RowCacheSize}
-                );
-            } elsif (UNIVERSAL::isa($dbh, 'DBI::st')) {
-                # Throw a statement handle exception.
-                $class_for{STH}->throw(
-                    @params,
-                    num_of_fields => $dbh->{NUM_OF_FIELDS},
-                    num_of_params => $dbh->{NUM_OF_PARAMS},
-                    field_names   => $dbh->{NAME},
-                    type          => $dbh->{TYPE},
-                    precision     => $dbh->{PRECISION},
-                    scale         => $dbh->{SCALE},
-                    nullable      => $dbh->{NULLABLE},
-                    cursor_name   => $dbh->{CursorName},
-                    param_values  => $dbh->{ParamValues},
-                    statement     => $dbh->{Statement},
-                    rows_in_cache => $dbh->{RowsInCache}
-                );
-            } else {
-                # Unknown exception. This shouldn't happen.
-                $class_for{Unknown}->throw(@params);
-            }
-        } else {
-            # Set up for a base class exception.
-            my $exc = $pkg;
-            # Make it an unknown exception if $dbh isn't a DBI class
-            # name. Probably shouldn't happen.
-            $class_for{Unknown} unless eval { $dbh->isa($dbh, 'DBI') };
-            if ($DBI::lasth) {
-                # There was a handle. Get the errors. This may be superfluous,
-                # since the handle ought to be in $dbh.
-                $exc->throw(
-                    error  => $err,
-                    errstr => $DBI::errstr,
-                    err    => $DBI::err,
-                    state  => $DBI::state,
-                    retval => $retval
-                );
-            } else {
-                # No handle, no errors.
-                $exc->throw(
-                    error  => $err,
-                    retval => $retval
-                );
-            }
+
+    # Support subclasses.
+    my %class_for =  map {
+        $_ => do {
+            my $class = "$pkg\::$_";
+            my $base  = __PACKAGE__ . "::$_";
+            no strict 'refs';
+            # Try to load the subclass and check its inheritance.
+            eval "require $class" unless @{"$class\::ISA"};
+            my $isa = \@{"$class\::ISA"};
+            die "$class is not a subclass of $base"
+                if $isa && !$class->isa($base);
+            # If subclass exists and inherits, use it. Otherwise use default.
+            $isa ? $class : $base;
         }
+    } qw(H DRH DBH STH Unknown);
+
+    return sub {
+        my ($err, $dbh, $retval) = @_;
+
+        # No handle, no choice.
+        $pkg->throw(
+            error  => $err,
+            retval => $retval
+        ) unless ref($dbh ||= $DBI::lasth);
+
+        # Assemble arguments for a handle exception.
+        my @params = (
+            error  => $err,
+            errstr => $dbh->errstr,
+            err    => $dbh->err,
+            state  => $dbh->state,
+            retval => $retval,
+            handle => $dbh,
+        );
+
+        # Throw the proper exception.
+        $class_for{STH}->throw(@params) if eval { $dbh->isa('DBI::st') };
+        $class_for{DBH}->throw(@params) if eval { $dbh->isa('DBI::db') };
+        $class_for{DRH}->throw(@params) if eval { $dbh->isa('DBI::dr') };
+
+        # Unknown exception. This shouldn't happen.
+        $class_for{Unknown}->throw(@params);
     };
 }
 
+package Exception::Class::DBI::H;
+sub warn                { shift->handle->{Warn} }
+sub active              { shift->handle->{Active} }
+sub kids                { shift->handle->{Kids} }
+sub active_kids         { shift->handle->{ActiveKids} }
+sub compat_mode         { shift->handle->{CompatMode} }
+sub inactive_destroy    { shift->handle->{InactiveDestroy} }
+sub trace_level         { shift->handle->{TraceLevel} }
+sub fetch_hash_key_name { shift->handle->{FetchHashKeyName} }
+sub chop_blanks         { shift->handle->{ChopBlanks} }
+sub long_read_len       { shift->handle->{LongReadLen} }
+sub long_trunc_ok       { shift->handle->{LongTruncOk} }
+sub taint               { shift->handle->{Taint} }
+
+package Exception::Class::DBI::DBH;
+sub auto_commit         { shift->handle->{AutoCommit} }
+sub db_name             { shift->handle->{Name} }
+sub statement           { shift->handle->{Statement} }
+sub row_cache_size      { shift->handle->{RowCacheSize} }
+
+package Exception::Class::DBI::STH;
+sub num_of_fields       { shift->handle->{NUM_OF_FIELDS} }
+sub num_of_params       { shift->handle->{NUM_OF_PARAMS} }
+sub field_names         { shift->handle->{NAME} }
+sub type                { shift->handle->{TYPE} }
+sub precision           { shift->handle->{PRECISION} }
+sub scale               { shift->handle->{SCALE} }
+sub nullable            { shift->handle->{NULLABLE} }
+sub cursor_name         { shift->handle->{CursorName} }
+sub param_values        { shift->handle->{ParamValues} }
+sub statement           { shift->handle->{Statement} }
+sub rows_in_cache       { shift->handle->{RowsInCache} }
+
 1;
 __END__
+
+=begin comment
+
+Fake-out Module::Build. Delete if it ever changes to support =head1 headers
+other than all uppercase.
 
 =head1 NAME
 
 Exception::Class::DBI - DBI Exception objects
 
-=head1 SYNOPSIS
+=end comment
+
+=head1 Name
+
+Exception::Class::DBI - DBI Exception objects
+
+=head1 Synopsis
 
   use DBI;
   use Exception::Class::DBI;
 
-  my $dbh = DBI->connect($data_source, $username, $auth, {
+  my $dbh = DBI->connect($dsn, $user, $pass, {
       PrintError  => 0,
       RaiseError  => 0,
       HandleError => Exception::Class::DBI->handler
@@ -160,33 +155,32 @@ Exception::Class::DBI - DBI Exception objects
   if (my $ex = $@) {
       print STDERR "DBI Exception:\n";
       print STDERR "  Exception Type: ", ref $ex, "\n";
-      print STDERR "  Error: ", $ex->error, "\n";
-      print STDERR "  Err: ", $ex->err, "\n";
-      print STDERR "  Errstr: " $ex->errstr, "\n";
-      print STDERR "  State: ", $ex->state, "\n";
-      my $ret = $ex->retval;
-      $ret = 'undef' unless defined $ret;
-      print STDERR "  Return Value: $ret\n";
+      print STDERR "  Error:          ", $ex->error, "\n";
+      print STDERR "  Err:            ", $ex->err, "\n";
+      print STDERR "  Errstr:         ", $ex->errstr, "\n";
+      print STDERR "  State:          ", $ex->state, "\n";
+      print STDERR "  Return Value:   ", ($ex->retval || 'undef'), "\n";
   }
 
-=head1 DESCRIPTION
+=head1 Description
 
 This module offers a set of DBI-specific exception classes. They inherit from
 Exception::Class, the base class for all exception objects created by the
-Exception::Class module from the CPAN. Exception::Class::DBI itself offers a
-single class method, C<handler()>, that returns a code reference appropriate
-for passing to the DBI C<HandleError> attribute.
+L<Exception::Class|Exception::Class> module from the CPAN.
+Exception::Class::DBI itself offers a single class method, C<handler()>, that
+returns a code reference appropriate for passing to the DBI C<HandleError>
+attribute.
 
 The exception classes created by Exception::Class::DBI are designed to be
 thrown in certain DBI contexts; the code reference returned by C<handler()>
-and passed to the DBI C<HandleError> attribute determines the context,
-assembles the necessary metadata, and throws the apopropriate exception.
+and passed to the DBI C<HandleError> attribute determines the context and
+throws the apopropriate exception.
 
 Each of the Exception::Class::DBI classes offers a set of object accessor
 methods in addition to those provided by Exception::Class. These can be used
-to output detailed output in the event of an exception.
+to output detailed diagnostic information in the event of an exception.
 
-=head1 INTERFACE
+=head1 Interface
 
 Exception::Class::DBI inherits from Exception::Class, and thus its entire
 interface. Refer to the Exception::Class documentation for details.
@@ -217,7 +211,7 @@ error.
 
 =back
 
-=head1 CLASSES
+=head1 Classes
 
 Exception::Class::DBI creates a number of exception classes, each one specific
 to a particular DBI error context. Most of the object methods described below
@@ -275,6 +269,17 @@ the standard SQLSTATE five character format.
 
 The first value being returned by the DBI method that failed (typically
 C<undef>).
+
+=item C<handle>
+
+  my $db_handle = $ex->handle;
+
+The DBI handle appropriate to the exception class. For
+Exception::Class::DBI::DRH, it will be a driver handle. For
+Exception::Class::DBI::DBH it will be a database handle. And for
+Exception::Class::DBI::STH it will be a statement handle. If there is no
+handle thrown in the exception (because, say, the exception was thrown before
+a driver handle could be created), the C<handle> will be C<undef>.
 
 =back
 
@@ -531,7 +536,7 @@ Exceptions of this class are thrown when the context for a DBI error cannot be
 determined. Inherits from L<Exception::Class::DBI|"Exception::Class::DBI">,
 but implements no methods of its own.
 
-=head1 NOTE
+=head1 Note
 
 B<Note:> Not I<all> of the attributes offered by the DBI are exploited by
 these exception classes. For example, the C<PrintError> and C<RaiseError>
@@ -539,7 +544,64 @@ attributes seemed redundant. But if folks think it makes sense to include the
 missing attributes for the sake of completeness, let me know. Enough interest
 will motivate me to get them in.
 
-=head1 TO DO
+=head1 Subclassing
+
+It is possible to subclass Exception::Class::DBI. The trick is to subclass its
+subclasses, too. Similar to subclassing DBI itself, this means that the handle
+subclasses should exist as subnamespaces of your base subclass.
+
+It's easier to explain with an example. Say that you wanted to add a new
+method to all DBI exceptions that outputs a nicely formatted error message.
+You might do it like this:
+
+  package MyApp::Ex::DBI;
+  use base 'Exception::Class::DBI';
+
+  sub full_message {
+      my $self = shift;
+      return $self->SUPER::full_message unless $self->can('statement');
+      return $self->SUPER::full_message
+          . ' [for Statement "'
+          . $self->statement . '"]';
+  }
+
+You can then use this subclass just like Exception::Class::DBI itself:
+
+  my $dbh = DBI->connect($dsn, $user, $pass, {
+      PrintError  => 0,
+      RaiseError  => 0,
+      HandleError => MyApp::Ex::DBI->handler,
+  });
+
+And that's all well and good, except that none of Exception::Class::DBI's own
+subclasses inherit from your class, so most exceptions won't be able to use
+your spiffy new method.
+
+The solution is to create subclasses of both the Exception::Class::DBI
+subclasses and your own base subclass, as long as they each use the same
+package name as your subclass, plus "H", "DRH", "DBH", "STH", and "Unknown".
+Here's what it looks like:
+
+  package MyApp::Ex::DBI::H;
+  use base 'MyApp::Ex::DBI', 'Exception::Class::DBI::H';
+
+  package MyApp::Ex::DBI::DRH;
+  use base 'MyApp::Ex::DBI', 'Exception::Class::DBI::DRH';
+
+  package MyApp::Ex::DBI::DBH;
+  use base 'MyApp::Ex::DBI', 'Exception::Class::DBI::DBH';
+
+  package MyApp::Ex::DBI::STH;
+  use base 'MyApp::Ex::DBI', 'Exception::Class::DBI::STH';
+
+  package MyApp::Ex::DBI::Unknown;
+  use base 'MyApp::Ex::DBI', 'Exception::Class::DBI::Unknown';
+
+And then things should work just spiffy! Of course, you probably don't need
+the H subclass unless you want to add other methods for the DRH, DBH, and STH
+classes to inherit from.
+
+=head1 To Do
 
 =over 4
 
@@ -549,23 +611,26 @@ I need to figure out a non-database specific way of testing STH exceptions.
 DBD::ExampleP works well for DRH and DBH exceptions, but not so well for
 STH exceptions.
 
-=item *
-
-Change the model to merely store a reference to the DBI handle and get its
-attributes only when methods are called, rather than grabbing them all at once
-when the exception is created.
-
 =back
 
-=head1 BUGS
+=head1 Bugs
 
 Please send bug reports to <bug-exception-class-dbi@rt.cpan.org>.
 
+=head1 Author
+
+=begin comment
+
+Fake-out Module::Build. Delete if it ever changes to support =head1 headers
+other than all uppercase.
+
 =head1 AUTHOR
+
+=end comment
 
 David Wheeler <david@kineticode.com>
 
-=head1 SEE ALSO
+=head1 See Also
 
 You should really only be using this module in conjunction with Tim Bunce's
 L<DBI|DBI>, so it pays to be familiar with its documentation.
@@ -576,7 +641,7 @@ it. There's lots more information in these exception objects, so use them!
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2002-2005, David Wheeler. All Rights Reserved.
+Copyright (c) 2002-2006, David Wheeler. All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.

@@ -3,6 +3,12 @@ Revision history for Perl extension Exception::Class::DBI.
 0.93
         - Reformatted some of the code and documentation so that it's
           easier to read.
+        - Added 'handle' attribute to store the DBI handle for which the
+          exception was thrown.
+        - Switched to explicit accessors that reach in to the cached database
+          handle stored. Suggested by Tim Bunce ages ago!
+        - Added support for subclassing Exception::Class::DBI and its
+          subclasses.
 
 0.92  2004-06-17T17:42:37
         - Fixed test that was breaking with newer versions of DBI.
