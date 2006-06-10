@@ -147,7 +147,7 @@ Exception::Class::DBI - DBI Exception objects
   my $dbh = DBI->connect($dsn, $user, $pass, {
       PrintError  => 0,
       RaiseError  => 0,
-      HandleError => Exception::Class::DBI->handler
+      HandleError => Exception::Class::DBI->handler,
   });
 
   eval { $dbh->do($sql) };
