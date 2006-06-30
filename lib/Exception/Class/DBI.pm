@@ -6,7 +6,7 @@ use 5.00500;
 use strict;
 use Exception::Class;
 use vars qw($VERSION);
-$VERSION = '0.94';
+$VERSION = '0.95';
 
 use Exception::Class (
     'Exception::Class::DBI' => {
