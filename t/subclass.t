@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 9;
+use Test::More tests => 12;
 BEGIN { use_ok('Exception::Class::DBI') }
 
 SUBCLASSES: {
@@ -25,6 +25,14 @@ SUBCLASSES: {
 }
 
 use DBI;
+
+# Make sure that the same handler is used every time.
+is +MyApp::Ex::DBI->handler, MyApp::Ex::DBI->handler,
+    'The handler code ref should always be the same for the subclass';
+is +Exception::Class::DBI->handler, Exception::Class::DBI->handler,
+    'The base class handler should always be the same code ref';
+isnt +MyApp::Ex::DBI->handler, Exception::Class::DBI->handler,
+    'The subclass handler should be different from the base class handler';
 
 ok my $dbh = DBI->connect('dbi:ExampleP:dummy', '', '', {
     PrintError  => 0,

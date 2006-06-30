@@ -40,8 +40,10 @@ use Exception::Class (
     }
 );
 
+my %handlers;
 sub handler {
     my $pkg = shift;
+    return $handlers{$pkg} if $handlers{$pkg};
 
     # Support subclasses.
     my %class_for =  map {
@@ -59,7 +61,7 @@ sub handler {
         }
     } qw(H DRH DBH STH Unknown);
 
-    return sub {
+    return $handlers{$pkg} = sub {
         my ($err, $dbh, $retval) = @_;
 
         # No handle, no choice.
