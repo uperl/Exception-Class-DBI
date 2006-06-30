@@ -1,6 +1,6 @@
 Revision history for Perl extension Exception::Class::DBI.
 
-0.94
+0.94  2006-06-30T00:04:32
         - The handler() method now always returns the same code referernce
           each time it's called for a given subclass. This behavior prevents
           the DBI connect_cached() method from caching a new database handle
