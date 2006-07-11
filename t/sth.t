@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: sth.t,v 1.8 2004/06/17 17:43:29 david Exp $
+# $Id$
 
 use strict;
 use Test::More (tests => 35);
@@ -29,15 +29,16 @@ eval {
 
 # Make sure we got the proper exception.
 ok( my $err = $@, "Get exception" );
+my $bang = $!;
 isa_ok( $err, 'Exception::Class::DBI' );
 isa_ok( $err, 'Exception::Class::DBI::H' );
 isa_ok( $err, 'Exception::Class::DBI::STH' );
 
 ok( $err->err == 2, "Check err" );
-is( $err->errstr, 'opendir(foo): No such file or directory',
+is( $err->errstr, "opendir(foo): $bang",
     "Check errstr" );
 like( $err->error,
-      qr/^DBD::ExampleP::st execute failed: opendir\(foo\): No such file or directory/,
+      qr/^DBD::ExampleP::st execute failed: opendir\(foo\): \E$bang/,
       "Check error" );
 is( $err->state, 'S1000', "Check state" );
 ok( ! defined $err->retval, "Check retval" );

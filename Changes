@@ -1,6 +1,8 @@
 Revision history for Perl extension Exception::Class::DBI.
 
 0.95
+        - Fixed test failure for localized error messages. Reported by Jens
+          Maier with a fix from Daniel Brook.
 
 0.94  2006-06-30T00:04:32
         - The handler() method now always returns the same code referernce
