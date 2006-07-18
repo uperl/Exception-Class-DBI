@@ -1,6 +1,6 @@
 Revision history for Perl extension Exception::Class::DBI.
 
-0.95
+0.95    2006-07-18T22:14:41
         - Fixed test failure for localized error messages. Reported by Jens
           Maier with a fix from Daniel Brook.
         - Updated tests to use is($foo, $bar) instead of ok( $foo == $bar)
