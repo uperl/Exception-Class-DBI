@@ -5,7 +5,7 @@ Revision history for Perl extension Exception::Class::DBI.
 0.95    2006-07-18T22:14:41
         - Fixed test failure for localized error messages. Reported by Jens
           Maier with a fix from Daniel Brook.
-        - Updated tests to use is($foo, $bar) instead of ok( $foo == $bar)
+        - Updated tests to use is($foo, $bar) instead of ok($foo == $bar)
           Spotted by Andy Lester.
 
 0.94  2006-06-30T00:04:32
@@ -30,7 +30,7 @@ Revision history for Perl extension Exception::Class::DBI.
 0.91  Tue Aug 26 02:25:56 2003
         - Switched to Module::Build.
         - Throwing exceptions with the "throw()" method, rather than
-          die'ing with the construction of exceptions with the "net()"
+          die'ing with the construction of exceptions with the "new()"
           constructor.
         - Added POD tests.
 
