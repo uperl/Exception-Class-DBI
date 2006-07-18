@@ -3,8 +3,8 @@
 # $Id$
 
 use strict;
-use Test::More (tests => 35);
-BEGIN { use_ok('Exception::Class::DBI') }
+use Test::More tests => 35;
+BEGIN { use_ok('Exception::Class::DBI') or die }
 # Use PurePerl to get around CursorName bug.
 BEGIN { $ENV{DBI_PUREPERL} = 2 }
 use DBI;
@@ -34,7 +34,7 @@ isa_ok( $err, 'Exception::Class::DBI' );
 isa_ok( $err, 'Exception::Class::DBI::H' );
 isa_ok( $err, 'Exception::Class::DBI::STH' );
 
-ok( $err->err == 2, "Check err" );
+is( $err->err, 2, "Check err" );
 is( $err->errstr, "opendir(foo): $bang",
     "Check errstr" );
 like( $err->error,
@@ -43,10 +43,10 @@ like( $err->error,
 is( $err->state, 'S1000', "Check state" );
 ok( ! defined $err->retval, "Check retval" );
 
-ok( $err->warn == 1, 'Check warn' );
+is( $err->warn, 1, 'Check warn' );
 ok( !$err->active, 'Check active' );
-ok( $err->kids == 0, 'Check kids' );
-ok( $err->active_kids == 0, 'Check active_kids' );
+is( $err->kids, 0, 'Check kids' );
+is( $err->active_kids, 0, 'Check active_kids' );
 ok( ! $err->compat_mode, 'Check compat_mode' );
 ok( ! $err->inactive_destroy, 'Check inactive_destroy' );
 
@@ -54,16 +54,16 @@ ok( ! $err->inactive_destroy, 'Check inactive_destroy' );
     # PurePerl->{TraceLevel} should return an integer, but it doesn't. It
     # returns undef instead.
     local $^W;
-    ok( $err->trace_level == 0, 'Check trace_level' );
+    cmp_ok( $err->trace_level, '==', 0, 'Check trace_level' );
 }
 
 is( $err->fetch_hash_key_name, 'NAME', 'Check fetch_hash_key_name' );
 ok( ! $err->chop_blanks, 'Check chop_blanks' );
-ok( $err->long_read_len == 80, 'Check long_read_len' );
+is( $err->long_read_len, 80, 'Check long_read_len' );
 ok( ! $err->long_trunc_ok, 'Check long_trunc_ok' );
 ok( ! $err->taint, 'Check taint' );
-ok( $err->num_of_fields == 14, 'Check num_of_fields' );
-ok( $err->num_of_params == 0, 'Check num_of_params' );
+is( $err->num_of_fields, 14, 'Check num_of_fields' );
+is( $err->num_of_params, 0, 'Check num_of_params' );
 is( ref $err->field_names, 'ARRAY', "Check field_names" );
 
 # These tend to return undef. Probably ought to try to add tests to make
