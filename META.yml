@@ -1,10 +1,6 @@
 ---
 name: Exception-Class-DBI
-version: !!perl/hash:Module::Build::Version
-  original: 0.95
-  version:
-    - 0
-    - 950
+version: 0.96
 author:
   - 'David Wheeler <david@kineticode.com>'
 abstract: DBI Exception objects
@@ -20,14 +16,14 @@ build_requires:
 provides:
   Exception::Class::DBI:
     file: lib/Exception/Class/DBI.pm
-    version: 0.95
+    version: 0.96
   Exception::Class::DBI::DBH:
     file: lib/Exception/Class/DBI.pm
   Exception::Class::DBI::H:
     file: lib/Exception/Class/DBI.pm
   Exception::Class::DBI::STH:
     file: lib/Exception/Class/DBI.pm
-generated_by: Module::Build version 0.2804
+generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
   version: 1.2
