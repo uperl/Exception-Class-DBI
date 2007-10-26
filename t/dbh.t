@@ -33,7 +33,7 @@ isa_ok( $err, 'Exception::Class::DBI::H' );
 isa_ok( $err, 'Exception::Class::DBI::DBH' );
 
 # Check the accessor values.
-is( $err->err, (DBI->VERSION >= '1.601' ? '2000000000' : '1'), "Check err" );
+is( $err->err, $DBI::stderr || 1, "Check err" );
 is( $err->errstr, 'Unknown field names: foo', "Check errstr" );
 is( $err->error, 'DBD::ExampleP::db do failed: Unknown field names: foo',
     "Check error" );
