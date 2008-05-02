@@ -6,6 +6,8 @@ Revision history for Perl extension Exception::Class::DBI.
           Bunce.
         - Added the "configure_requires", and "recommends" parameters to
           Build.PL.
+        - Updated the POD test to properly make use of Test::POD 1.20 or
+          newer.
 
 0.95    2006-07-18T22:14:41
         - Fixed test failure for localized error messages. Reported by Jens
