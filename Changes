@@ -3,6 +3,7 @@ Revision history for Perl extension Exception::Class::DBI.
 0.97
         - Updated copyright.
         - Added a link to the Subversion repository.
+        - Fixed test failures on Perl 5.6.2.
 
 0.96    2007-10-26T19:01:36
         - Fixed test failure due to the change in value of $dbh->err in DBI
