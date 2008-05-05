@@ -615,9 +615,14 @@ STH exceptions.
 
 =back
 
-=head1 Bugs
+=head1 Support
 
-Please send bug reports to <bug-exception-class-dbi@rt.cpan.org>.
+This module is stored in an open repository at the following address:
+
+L<https://svn.kineticode.com/Exception-Class-DBI/trunk/>
+
+Patches against Exception::Class::DBI are welcome. Please send bug reports to
+<bug-exception-class-dbi@rt.cpan.org>.
 
 =head1 Author
 
@@ -643,7 +648,7 @@ it. There's lots more information in these exception objects, so use them!
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2002-2006, David Wheeler. All Rights Reserved.
+Copyright (c) 2002-2008, David Wheeler. Some Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
