@@ -1,5 +1,7 @@
 Revision history for Perl extension Exception::Class::DBI.
 
+0.98
+
 0.97  2008-05-05T19:10:05
         - Updated copyright.
         - Added a link to the Subversion repository.
