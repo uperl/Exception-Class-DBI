@@ -79,3 +79,7 @@ is( ref $err->nullable, 'ARRAY', "Check nullable" );
 ok( ! defined $err->cursor_name, "Check cursor_name" );
 is( $err->statement, 'select * from foo', 'Check statement' );
 ok( ! defined $err->rows_in_cache, "Check rows_in_cache" );
+
+# This keeps Perl 5.6.2 from trying to run tests again. I've no idea why it
+# does that. :-(
+exit;

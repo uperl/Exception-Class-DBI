@@ -47,7 +47,7 @@ isa_ok $dbh->{HandleError}, 'CODE', 'The HandleError attribute';
 
 # Trigger an exception.
 eval {
-    my $sth = $dbh->prepare("select * from foo");
+    my $sth = $dbh->prepare('select * from foo');
     $sth->execute;
 };
 
@@ -58,3 +58,7 @@ isa_ok $err, 'Exception::Class::DBI::H', 'The exception';
 isa_ok $err, 'Exception::Class::DBI::STH', 'The exception';
 isa_ok $err, 'MyApp::Ex::DBI::STH', 'The exception';
 isa_ok $err, 'MyApp::Ex::DBI', 'The exception';
+
+# This keeps Perl 5.6.2 from trying to run tests again. I've no idea why it
+# does that. :-(
+exit;

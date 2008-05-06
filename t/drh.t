@@ -49,3 +49,7 @@ SKIP: {
     ok( ! $err->long_trunc_ok, "Check long_trunc_ok" );
     ok( ! $err->taint, "Check taint" );
 }
+
+# This keeps Perl 5.6.2 from trying to run tests again. I've no idea why it
+# does that. :-(
+exit;

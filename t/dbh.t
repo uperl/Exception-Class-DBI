@@ -62,3 +62,7 @@ ok( $err->auto_commit, "Check auto_commit" );
 is( $err->db_name, 'dummy', "Check db_name" );
 is( $err->statement, 'select foo from foo', "Check statement" );
 ok( ! defined $err->row_cache_size, "Check row_cache_size" );
+
+# This keeps Perl 5.6.2 from trying to run tests again. I've no idea why it
+# does that. :-(
+exit;

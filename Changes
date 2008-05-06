@@ -1,6 +1,10 @@
 Revision history for Perl extension Exception::Class::DBI.
 
 0.98
+        - Fixed strange test failures on Perl 5.6.2. Somehow tests are getting
+          run more than once, resulting in strange failures. I got 'round this
+          issue by putting an explicit `exit;` at the end of each test script.
+          Reported by David Cantrell.
 
 0.97  2008-05-05T19:10:05
         - Updated copyright.
