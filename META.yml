@@ -1,6 +1,6 @@
 ---
 name: Exception-Class-DBI
-version: 0.97
+version: 0.98
 author:
   - 'David Wheeler <david@kineticode.com>'
 abstract: DBI Exception objects
@@ -21,7 +21,7 @@ recommends:
 provides:
   Exception::Class::DBI:
     file: lib/Exception/Class/DBI.pm
-    version: 0.97
+    version: 0.98
   Exception::Class::DBI::DBH:
     file: lib/Exception/Class/DBI.pm
   Exception::Class::DBI::H:
