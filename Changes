@@ -1,6 +1,7 @@
 Revision history for Perl extension Exception::Class::DBI.
 
 1.00
+        - Fixed a test failure on Perl 5.5. Reported by Slaven Rezic.
 
 0.99  2008-05-15T03:31:30
         - Fixed another Perl 5.6.2 test error. Reported by Slaven Rezic.

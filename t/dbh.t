@@ -3,7 +3,7 @@
 # $Id$
 
 use strict;
-use Test::More tests => 28;
+use Test::More tests => 27;
 BEGIN { use_ok('Exception::Class::DBI') or die }
 use DBI;
 
@@ -52,7 +52,6 @@ is( $err->active, 1, "Check active" );
 # as it seems safer with older Perls. See
 # http://groups.google.com/group/perl.dbi.dev/browse_thread/thread/6a1903e2eb251d45
 # for details.
-is( $err->kids, ($^V lt v5.6.2 ? 1 : 0), "Check kids" );
 is( $err->kids, ($] < 5.006_002 ? 1 : 0), "Check kids" );
 is( $err->active_kids, 0, "Check active_kids" );
 ok( ! $err->inactive_destroy, "Check inactive_destroy" );
