@@ -1,6 +1,7 @@
 Revision history for Perl extension Exception::Class::DBI.
 
 1.01
+        - Fixed a warning in `t/sth.t`.
 
 1.00  2008-05-22T03:28:50
         - Fixed a test failure on Perl 5.5. Reported by Slaven Rezic.

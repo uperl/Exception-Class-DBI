@@ -53,7 +53,7 @@ ok( ! $err->inactive_destroy, 'Check inactive_destroy' );
 {
     # PurePerl->{TraceLevel} should return an integer, but it doesn't. It
     # returns undef instead.
-    local $^W;
+    local $SIG{__WARN__} = sub {};
     cmp_ok( $err->trace_level, '==', 0, 'Check trace_level' );
 }
 
