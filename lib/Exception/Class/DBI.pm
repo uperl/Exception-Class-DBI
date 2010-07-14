@@ -176,7 +176,7 @@ attribute.
 The exception classes created by Exception::Class::DBI are designed to be
 thrown in certain DBI contexts; the code reference returned by C<handler()>
 and passed to the DBI C<HandleError> attribute determines the context and
-throws the apopropriate exception.
+throws the appropriate exception.
 
 Each of the Exception::Class::DBI classes offers a set of object accessor
 methods in addition to those provided by Exception::Class. These can be used
