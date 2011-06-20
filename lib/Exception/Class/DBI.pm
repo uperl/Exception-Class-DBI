@@ -615,7 +615,7 @@ L<bug-Exception-Class-DBI.cpan.org|mailto:bug-Exception-Class-DBI.cpan.org>.
 
 =head1 Author
 
-David Wheeler <david@kineticode.com>
+David E. Wheeler <david@justatheory.com>
 
 =head1 See Also
 
@@ -628,7 +628,7 @@ it. There's lots more information in these exception objects, so use them!
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2002-2008, David Wheeler. Some Rights Reserved.
+Copyright (c) 2002-2011, David E. Wheeler. Some Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
