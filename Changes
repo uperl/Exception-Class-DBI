@@ -1,6 +1,6 @@
 Revision history for Perl extension Exception::Class::DBI.
 
-1.01
+1.01  2011-06-20T04:27:43
         - Fixed a warning in `t/sth.t`.
         - Moved repostitory to
           [GitHub](https://github.com/theory/exception-class-dbi/).
