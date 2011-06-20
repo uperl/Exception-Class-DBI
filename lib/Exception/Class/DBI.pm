@@ -1,7 +1,5 @@
 package Exception::Class::DBI;
 
-# $Id$
-
 use 5.00500;
 use strict;
 use Exception::Class;

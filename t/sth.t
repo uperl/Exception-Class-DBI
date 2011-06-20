@@ -1,7 +1,5 @@
 #!/usr/bin/perl -w
 
-# $Id$
-
 use strict;
 use Test::More tests => 35;
 BEGIN { use_ok('Exception::Class::DBI') or die }
