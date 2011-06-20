@@ -2,6 +2,9 @@ Revision history for Perl extension Exception::Class::DBI.
 
 1.01
         - Fixed a warning in `t/sth.t`.
+        - Moved repostitory to
+          [GitHub](https://github.com/theory/exception-class-dbi/).
+        - Switched to a "traditional" `Makefile.PL`.
 
 1.00  2008-05-22T03:28:50
         - Fixed a test failure on Perl 5.5. Reported by Slaven Rezic.
