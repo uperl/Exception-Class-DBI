@@ -1,4 +1,4 @@
-Exception/Class/DBI version 1.01
+Exception/Class/DBI version 1.02
 ================================
 
 This module offers a set of DBI-specific exception classes. They inherit from
