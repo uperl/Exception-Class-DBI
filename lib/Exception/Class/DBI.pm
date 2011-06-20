@@ -124,17 +124,6 @@ sub rows_in_cache       { shift->handle->{RowsInCache} }
 1;
 __END__
 
-=begin comment
-
-Fake-out Module::Build. Delete if it ever changes to support =head1 headers
-other than all uppercase.
-
-=head1 NAME
-
-Exception::Class::DBI - DBI Exception objects
-
-=end comment
-
 =head1 Name
 
 Exception::Class::DBI - DBI Exception objects
@@ -625,15 +614,6 @@ mail to
 L<bug-Exception-Class-DBI.cpan.org|mailto:bug-Exception-Class-DBI.cpan.org>.
 
 =head1 Author
-
-=begin comment
-
-Fake-out Module::Build. Delete if it ever changes to support =head1 headers
-other than all uppercase.
-
-=head1 AUTHOR
-
-=end comment
 
 David Wheeler <david@kineticode.com>
 
