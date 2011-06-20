@@ -615,12 +615,14 @@ STH exceptions.
 
 =head1 Support
 
-This module is stored in an open repository at the following address:
+This module is stored in an open L<GitHub
+repository|http://github.com/theory/exception-class-dbi/>. Feel free to fork
+and contribute!
 
-L<https://svn.kineticode.com/Exception-Class-DBI/trunk/>
-
-Patches against Exception::Class::DBI are welcome. Please send bug reports to
-<bug-exception-class-dbi@rt.cpan.org>.
+Please file bug reports via L<GitHub
+Issues|http://github.com/theory/exception-class-dbi/issues/> or by sending
+mail to
+L<bug-Exception-Class-DBI.cpan.org|mailto:bug-Exception-Class-DBI.cpan.org>.
 
 =head1 Author
 
