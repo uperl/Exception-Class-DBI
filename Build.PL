@@ -15,5 +15,12 @@ my $build = Module::Build->new(
         'DBI'              => '1.28',
         'Exception::Class' => '1.02',
     },
+    meta_merge => {
+        resources => {
+            homepage   => 'http://search.cpan.org/dist/Exception-Class-DBI/',
+            bugtracker => 'http://github.com/theory/exception-class-dbi/issues/',
+            repository => 'http://github.com/theory/exception-class-dbi/',
+        }
+    },
 );
 $build->create_build_script;
