@@ -611,7 +611,7 @@ and contribute!
 Please file bug reports via L<GitHub
 Issues|http://github.com/theory/exception-class-dbi/issues/> or by sending
 mail to
-L<bug-Exception-Class-DBI.cpan.org|mailto:bug-Exception-Class-DBI.cpan.org>.
+L<bug-Exception-Class-DBI@rt.cpan.org|mailto:bug-Exception-Class-DBI@rt.cpan.org>.
 
 =head1 Author
 
