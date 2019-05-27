@@ -5,8 +5,7 @@ use strict;
 use warnings;
 use Exception::Class;
 
-our $VERSION = '1.03_01';
-$VERSION =~ tr/_//d;
+our $VERSION = '1.04';
 
 use Exception::Class (
     'Exception::Class::DBI' => {
