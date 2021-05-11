@@ -32,13 +32,13 @@ WriteMakefile(
         'meta-spec' => { version => 2 },
         resources => {
             bugtracker => {
-                web  => 'https://github.com/plicease/Exception-Class-DBI/issues',
+                web  => 'https://github.com/uperl/Exception-Class-DBI/issues',
             },
             homepage => 'https://metacpan.org/pod/Exception-Class-DBI',
             repository => {
                 type => 'git',
-                url  => 'https://github.com/plicease/Exception-Class-DBI.git',
-                web  => 'https://github.com/plicease/Exception-Class-DBI',
+                url  => 'https://github.com/uperl/Exception-Class-DBI.git',
+                web  => 'https://github.com/uperl/Exception-Class-DBI',
             },
         }
     },
