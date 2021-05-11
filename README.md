@@ -1,4 +1,4 @@
-# Exception::Class::DBI ![linux](https://github.com/uperl/Exception-Class-DBI/workflows/linux/badge.svg)
+# Exception::Class::DBI ![linux](https://github.com/uperl/Exception-Class-DBI/workflows/linux/badge.svg) ![macos](https://github.com/uperl/Exception-Class-DBI/workflows/macos/badge.svg) ![windows](https://github.com/uperl/Exception-Class-DBI/workflows/windows/badge.svg) ![cygwin](https://github.com/uperl/Exception-Class-DBI/workflows/cygwin/badge.svg) ![msys2-mingw](https://github.com/uperl/Exception-Class-DBI/workflows/msys2-mingw/badge.svg)
 
 DBI Exception objects
 
