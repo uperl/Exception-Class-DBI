@@ -3,9 +3,10 @@ package Exception::Class::DBI;
 use 5.006;
 use strict;
 use warnings;
-use Exception::Class;
+use Exception::Class 1.02;
 
-our $VERSION = '1.04';
+# ABSTRACT: DBI Exception objects
+# VERSION
 
 use Exception::Class (
     'Exception::Class::DBI' => {
@@ -219,7 +220,7 @@ well as to the values passed to the C<handler()> exception handler via the DBI
 C<HandleError> attribute. Exceptions of this base class are only thrown when
 there is no DBI handle object executing, e.g. in the DBI C<connect()>
 method. B<Note:> This functionality is not yet implemented in DBI -- see the
-discusion that starts here:
+discussion that starts here:
 L<http://archive.develooper.com/dbi-dev@perl.org/msg01438.html>.
 
 =over 4
@@ -606,13 +607,11 @@ STH exceptions.
 =head1 Support
 
 This module is stored in an open L<GitHub
-repository|http://github.com/plicease/Exception-Class-DBI/>. Feel free to fork
+repository|http://github.com/uperl/Exception-Class-DBI/>. Feel free to fork
 and contribute!
 
 Please file bug reports via L<GitHub
-Issues|http://github.com/plicease/Exception-Class-DBI/issues/> or by sending
-mail to
-L<bug-Exception-Class-DBI@rt.cpan.org|mailto:bug-Exception-Class-DBI@rt.cpan.org>.
+Issues|http://github.com/uperl/Exception-Class-DBI/issues/>.
 
 =head1 Author
 
@@ -629,11 +628,5 @@ See the documentation for Dave Rolsky's L<Exception::Class|Exception::Class>
 module for details on the methods this module's classes inherit from
 it. There's lots more information in these exception objects, so use them!
 
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (c) 2002-2019, David E. Wheeler. Some Rights Reserved.
-
-This module is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself.
-
 =cut
+

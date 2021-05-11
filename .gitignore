@@ -1,9 +1,3 @@
-/blib
 /Exception-Class-DBI-*
-/MANIFEST
-/MANIFEST.bak
-/MYMETA.*
-/Makefile
-/pm_to_blib
-/t/scripts
+/.build
 *.swp
