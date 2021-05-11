@@ -1,4 +1,6 @@
-Revision history for Perl extension Exception::Class::DBI.
+Revision history for {{$dist->name}}
+
+{{$NEXT}}
 
 1.04 2019-05-27 14:41:02 -0400
   - Production release identical to 1.03_01
