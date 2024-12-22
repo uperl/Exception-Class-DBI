@@ -1,3 +1,5 @@
 /Exception-Class-DBI-*
 /.build
 *.swp
+*.old
+*.orig

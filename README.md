@@ -1,4 +1,4 @@
-# Exception::Class::DBI ![linux](https://github.com/uperl/Exception-Class-DBI/workflows/linux/badge.svg) ![macos](https://github.com/uperl/Exception-Class-DBI/workflows/macos/badge.svg) ![windows](https://github.com/uperl/Exception-Class-DBI/workflows/windows/badge.svg) ![cygwin](https://github.com/uperl/Exception-Class-DBI/workflows/cygwin/badge.svg) ![msys2-mingw](https://github.com/uperl/Exception-Class-DBI/workflows/msys2-mingw/badge.svg)
+# Exception::Class::DBI ![linux](https://github.com/uperl/Exception-Class-DBI/workflows/linux/badge.svg) ![macos](https://github.com/uperl/Exception-Class-DBI/workflows/macos/badge.svg) ![windows](https://github.com/uperl/Exception-Class-DBI/workflows/windows/badge.svg)
 
 DBI Exception objects
 
@@ -561,7 +561,7 @@ it. There's lots more information in these exception objects, so use them!
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2002-2021 by David E. Wheeler.
+This software is copyright (c) 2002-2024 by David E. Wheeler.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
